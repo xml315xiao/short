@@ -1,0 +1,47 @@
+input[type="text"]#url {
+    width: 94%;
+    vertical-align: middle;
+    font-weight: 300;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    height: 56px;
+    font-family: FontAwesome;
+    font-size: 28pt;
+    border: 0;
+    border-radius: 2px;
+    color: #808080;
+    padding: 10px 20px;
+    letter-spacing: -2px;
+    line-height: 63px;
+}
+
+input[type="submit"] {
+    background: #128c32 none repeat scroll 0 0;
+    border: 0 none;
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 0 1px #0f6d28;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 300;
+    height: 76px;
+    line-height: 32px;
+    margin: 0;
+    padding: 10px 20px;
+    position: absolute;
+    right: 28px;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+span#error {
+    width: auto;
+    height: 24px;
+    line-height: 24px;
+    padding: 9px 15px;
+    display: block;
+    font-size: large;
+}

@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS short_urls (
+  id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  long_url VARCHAR(255) NOT NULL,
+  short_code VARCHAR (255) DEFAULT '',
+  create_time INTEGER UNSIGNED NOT NULL,
+
+  PRIMARY KEY (id),
+  KEY short_code (short_code)
+)ENGINE=MYISAM CHARSET=utf8;
