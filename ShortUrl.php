@@ -19,10 +19,11 @@ class ShortUrl
     /**
      * Convent long url to short code exit base url.
      * @param $url
+     * @param $customer
      * @return bool|string
      * @throws Exception
      */
-    public function conventUrl($url)
+    public function conventUrl($url, $customer = '')
     {
         // check url format
         if ( strlen($url) === 0 ) {
@@ -35,7 +36,7 @@ class ShortUrl
         // check whether the long url already shorted and stored in database
         $short_code = $this->checkExists($url);
         if (FALSE === $short_code) {
-            $short_code = $this->createShortCode($url);
+            $short_code = $this->createShortCode($url, $customer);
         }
 
         return $short_code;
@@ -44,16 +45,21 @@ class ShortUrl
     /**
      * Short long url and stored one record in database
      * @param $url
+     * @param $customer
      * @return string
      * @throws Exception
      */
-    protected function createShortCode($url)
+    protected function createShortCode($url, $customer = '')
     {
         // convent id number into short code with 5~7 length
-        include_once './Bijective.php';
-        $timestamp = str_replace(' ', '', substr(microtime(), 2, 5). substr(microtime(), -5));
-        $obj = new Bijective();
-        $short_code = $obj->encode($timestamp);
+        if (strlen($customer) > 0) {
+            $short_code = $customer;
+        } else {
+            include_once './Bijective.php';
+            $timestamp = str_replace(' ', '', substr(microtime(), 2, 5). substr(microtime(), -5));
+            $obj = new Bijective();
+            $short_code = $obj->encode($timestamp);
+        }
 
         // create new record and get the new insert id number
         $sql = 'INSERT INTO ' . $this->table .
@@ -107,6 +113,24 @@ class ShortUrl
 
         $result = $statement->fetch();
         return (empty($result)) ? FALSE : $result['short_code'];
+    }
+
+    /**
+     * Check whether the short url support by customer has been used.
+     * @param $customer
+     * @return bool
+     */
+    public function checkEnable($customer)
+    {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE short_code = :short_code';
+        $statement = $this->pdo->prepare($query);
+        $params = array(
+            'short_code' => $customer
+        );
+        $statement->execute($params);
+        $result = $statement->fetch();
+
+        return (empty($result)) ? TRUE : FALSE;
     }
 
 }

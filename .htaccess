@@ -1,0 +1,8 @@
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^mc\.cc$
+RewriteRule ^$ /jump.php [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ jump.php/$1 [QSA,PT,L]

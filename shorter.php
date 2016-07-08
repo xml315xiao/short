@@ -2,7 +2,8 @@
 include './ShortUrl.php';
 
 $base_url = 'http://mc.cc/';
-$url = $_POST['url'];
+$url = $_GET['url'];
+$customer = $_GET['customer'];
 
 // check url format
 if ( strlen($url) === 0 ) {
@@ -17,5 +18,9 @@ if ( FALSE !== strpos($url, rtrim($base_url, '/')) ) {
 }
 
 $short = new ShortUrl();
-$short_url = rtrim($base_url, '/'). '/'. $short->conventUrl($url);
+
+if (strlen($customer) > 0 && $short->checkEnable($customer) === FALSE) {
+    exit ( urldecode(json_encode(array('success'=>FALSE, 'error'=>urlencode('自定义短链接已被使用'), 'long_url'=>$url))) );
+}
+$short_url = rtrim($base_url, '/'). '/'. $short->conventUrl($url, $customer);
 exit ( urldecode(json_encode(array('success'=>TRUE, 'short_url'=>urlencode($short_url), 'long_url'=>$url))) );
