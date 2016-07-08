@@ -88,7 +88,7 @@
                 }
             });
 
-            $("button[type=submit]").click(function () {
+            $("button[type=submit]").click(function(){
                 $("span.error").text("");
                 $("span.warning").text("");
                 $("span.info").text("");
@@ -121,7 +121,7 @@
                 $("div.controls > span.info").addClass("hide");
             });
 
-            function validateURL(url) {
+            function validateURL(url){
                 return /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(url);
             }
 
@@ -129,7 +129,7 @@
                 return /^\w*$/.test(short);
             }
 
-            function validateEnable(short) {
+            function validateEnable(short){
                 var filter = ['create', 'jump', 'check'];
                 if (short.length < 1)
                     return true;

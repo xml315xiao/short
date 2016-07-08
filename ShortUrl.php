@@ -58,7 +58,10 @@ class ShortUrl
             include_once './Bijective.php';
             $timestamp = str_replace(' ', '', substr(microtime(), 2, 5). substr(microtime(), -5));
             $obj = new Bijective();
-            $short_code = $obj->encode($timestamp);
+
+            do {
+                $short_code = $obj->encode($timestamp);
+            } while ( FALSE === $this->checkEnable($short_code) );
         }
 
         // create new record and get the new insert id number

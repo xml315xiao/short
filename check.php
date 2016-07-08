@@ -1,7 +1,7 @@
 <?php
 include './ShortUrl.php';
 
-$url = $_GET['short'];
+$url = trim($_GET['short']);
 $short = new ShortUrl();
 $result = $short->checkEnable($url);
 
