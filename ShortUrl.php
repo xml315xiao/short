@@ -56,10 +56,10 @@ class ShortUrl
             $short_code = $customer;
         } else {
             include_once './Bijective.php';
-            $timestamp = str_replace(' ', '', substr(microtime(), 2, 5). substr(microtime(), -5));
             $obj = new Bijective();
 
             do {
+                $timestamp = str_replace(' ', '', substr(microtime(), 2, 5). substr(microtime(), -5));
                 $short_code = $obj->encode($timestamp);
             } while ( FALSE === $this->checkEnable($short_code) );
         }
