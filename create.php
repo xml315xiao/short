@@ -51,7 +51,7 @@ if (!isset($_SESSION['user'])) {
             <label for="customer" class="control-label">自定义：</label>
             <div class="controls">
                 <div class="input-prepend">
-                    <span class="add-on">http://mc.cc/</span>
+                    <span class="add-on">http://oo.cc/</span>
                     <input type="text" class="input-xxlarge" id="customer" style="width:440px;" placeholder="字母或数字">
                 </div>
                 <span class="help-inline warning"></span>
@@ -177,7 +177,7 @@ if (!isset($_SESSION['user'])) {
                         } else {
                             $("#result").text(data.short_url).addClass("success").removeClass("hide");
                             $("#qrcode").qrcode({width: 96,height: 96,text: data.short_url});
-                            if (customer_url.length > 0 && data.short_url.replace("http://mc.cc/", "") != customer_url) {
+                            if (customer_url.length > 0 && data.short_url.replace("http://oo.cc/", "") != customer_url) {
                                 $("#result").next("span").removeClass("error").addClass("info").text("当前URL已成功生成过短链接,不可再自定义");
                                 $("span.info").removeClass("hide");
                             } else {

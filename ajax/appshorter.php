@@ -1,7 +1,7 @@
 <?php
 include __DIR__. DIRECTORY_SEPARATOR. 'ShortUrl.php';
 
-$base_url = 'http://mc.cc/';
+$base_url = 'http://oo.cc/';
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 
@@ -12,7 +12,7 @@ if ( strlen($url) === 0 ) {
 if ( FALSE === filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
     exit ( urldecode(json_encode(array('success'=>FALSE, 'error'=>urlencode('url格式异常'), 'long_url'=>$url))) );
 }
-// filter own url. eg: http://mc.cc/5ac1O1
+// filter own url. eg: http://oo.cc/5ac1O1
 if ( FALSE !== strpos($url, rtrim($base_url, '/')) ) {
     exit ( urldecode(json_encode(array('success'=>TRUE, 'short_url'=>$url, 'long_url'=>$url))) );
 }

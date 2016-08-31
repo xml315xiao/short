@@ -1,9 +1,9 @@
-# 短链接生成文档 （http://mc.cc )
+# 短链接生成文档 （http://oo.cc )
 
 Generates a shorter URI  Documentation.
 
 ##请求URL地址
-[http://mc.cc/ajax/appshorter.php](http://mc.cc/ajax/appshorter.php)
+[http://oo.cc/ajax/appshorter.php](http://oo.cc/ajax/appshorter.php)
 
 ## 请求参数 （GET）
 
@@ -21,9 +21,9 @@ Generates a shorter URI  Documentation.
 ## 返回结果 （JSON ）
 
  * **成功示例**
-> http://mc.cc/ajax/appshorter.php?url=http://www.google.com&token=62dfee8d1a7dd5b9cf28656a73345978
+> http://oo.cc/ajax/appshorter.php?url=http://www.google.com&token=62dfee8d1a7dd5b9cf28656a73345978
 
->{"success":true,"short_url":"http://mc.cc/bktC9B","long_url":"http://www.google.com"}
+>{"success":true,"short_url":"http://oo.cc/bktC9B","long_url":"http://www.google.com"}
 
 > success:   true 
 
@@ -32,7 +32,7 @@ Generates a shorter URI  Documentation.
 > long_url：返回原始长链接
  
  * **失败示例**
-> http://mc.cc/ajax/appshorter.php?url=http://www.google.com&token=62dfee8d1a7dd5b9cf28656
+> http://oo.cc/ajax/appshorter.php?url=http://www.google.com&token=62dfee8d1a7dd5b9cf28656
 
 > {"success":false,"error":"校验码异常","long_url":"http://www.google.com"}
 
