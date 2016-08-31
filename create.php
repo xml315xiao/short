@@ -1,10 +1,16 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>卖场网-短链接生成</title>
-    <link rel="stylesheet" href="./bootstrap.min.css">
-    <script src="jquery.js"></script>
+    <link rel="stylesheet" href="html/bootstrap.min.css">
+    <script src="html/jquery.js"></script>
     <style>
         span.error {
             color: #b94a48;
@@ -25,6 +31,10 @@
         }
         label {
             font-size: 17.5px;
+        }
+        #qrcode {
+            margin-top: 20px;
+            margin-left: 180px;
         }
     </style>
 </head>
@@ -51,6 +61,7 @@
             <span id="result" class="help-inline hide"></span>
             <span class="info hide">当前URL已成功生成过短链接,不可再自定义</span>
         </div>
+        <div id="qrcode"></div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">生成短链接</button>
             <button type="button" class="btn cancel">取消</button>
@@ -58,7 +69,6 @@
     </div>
 
     <script>
-
         $(function(){
             $("input#url").on("change, focusout", function(){
                 var long_url = $("#url").val().trim();
@@ -75,12 +85,12 @@
 
             $("input#customer").on("change", function(){
                 var customer = $("#customer").val().trim();
-                if (customer.length > 0) {
-                    if (!validateShort(customer)) {
+                if (customer.length > 0){
+                    if(!validateShort(customer)){
                         $("span.warning").text("输入的短链接地址不合法");
                         $("#customer").focus();
                     } else if( !validateEnable(customer)) {
-                        $("span.warning").text("输入的短链接地址已被使用，请重新输入");
+                        $("span.warning").text("当前短链接不合法或已被他人使用");
                         $("#customer").focus();
                     } else {
                         $("span.warning").text("");
@@ -91,7 +101,9 @@
             $("button[type=submit]").click(function(){
                 $("span.error").text("");
                 $("span.warning").text("");
+                $("#result").text("");
                 $("span.info").text("");
+                clearQRCode();
                 var long_url = $("#url").val().trim();
                 var customer = $("#customer").val().trim();
                 if (long_url.length < 1) {
@@ -105,7 +117,7 @@
                         $("span.warning").text("输入的短链接地址不合法");
                         $("#customer").focus();
                     } else if( !validateEnable(customer)) {
-                        $("span.warning").text("输入的短链接地址已被使用，请重新输入");
+                        $("span.warning").text("当前短链接不合法或已被他人使用");
                         $("#customer").focus();
                     } else {
                         createShortUrl(long_url, customer);
@@ -119,6 +131,7 @@
                 $("input").val("");
                 $("div.controls > span:not(.info)").text("");
                 $("div.controls > span.info").addClass("hide");
+                clearQRCode();
             });
 
             function validateURL(url){
@@ -130,7 +143,7 @@
             }
 
             function validateEnable(short){
-                var filter = ['create', 'jump', 'check'];
+                var filter = ['create', 'jump', 'check', 'login', 'checkuser', 'shorter', 'database', 'bijective', 'ajax'];
                 if (short.length < 1)
                     return true;
                 if ($.inArray(short.toLowerCase(), filter) != -1)
@@ -138,7 +151,7 @@
                 var isEnable = true;
                 $.ajax({
                     type: "GET",
-                    url: "./check.php",
+                    url: "./ajax/check.php",
                     async: false,
                     data: {"short": short},
                     success: function(data){
@@ -156,15 +169,16 @@
             function createShortUrl(long_url, customer_url){
                 $.ajax({
                     type: "GET",
-                    url: "./shorter.php/",
+                    url: "./ajax/shorter.php/",
                     data: {"url": long_url, 'customer':customer_url},
                     success: function (data) {
                         if (false == data.success) {
                             $("#result").text(data.error).addClass("error").removeClass("hide");
                         } else {
                             $("#result").text(data.short_url).addClass("success").removeClass("hide");
-                            $("#result").next("span").removeClass("error").addClass("info").text("当前URL已成功生成过短链接,不可再自定义");
-                            if (customer_url.length > 0 && data.short_url.replace("http://mc.cc/", "" != customer_url)) {
+                            $("#qrcode").qrcode({width: 96,height: 96,text: data.short_url});
+                            if (customer_url.length > 0 && data.short_url.replace("http://mc.cc/", "") != customer_url) {
+                                $("#result").next("span").removeClass("error").addClass("info").text("当前URL已成功生成过短链接,不可再自定义");
                                 $("span.info").removeClass("hide");
                             } else {
                                 $("span.info").addClass("hide");
@@ -178,8 +192,13 @@
                 })
             }
 
+            var clearQRCode = function(){
+                $("#qrcode").html("");
+            };
+
         });
 
     </script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-include  './database.php';
+include __DIR__. DIRECTORY_SEPARATOR. 'database.php';
 
 class ShortUrl
 {
@@ -19,11 +19,12 @@ class ShortUrl
     /**
      * Convent long url to short code exit base url.
      * @param $url
+     * @param $username
      * @param $customer
      * @return bool|string
      * @throws Exception
      */
-    public function conventUrl($url, $customer = '')
+    public function conventUrl($url, $username, $customer = '')
     {
         // check url format
         if ( strlen($url) === 0 ) {
@@ -36,7 +37,7 @@ class ShortUrl
         // check whether the long url already shorted and stored in database
         $short_code = $this->checkExists($url);
         if (FALSE === $short_code) {
-            $short_code = $this->createShortCode($url, $customer);
+            $short_code = $this->createShortCode($url, $username, $customer);
         }
 
         return $short_code;
@@ -45,17 +46,20 @@ class ShortUrl
     /**
      * Short long url and stored one record in database
      * @param $url
+     * @param $username
      * @param $customer
      * @return string
      * @throws Exception
      */
-    protected function createShortCode($url, $customer = '')
+    protected function createShortCode($url, $username, $customer = '')
     {
         // convent id number into short code with 5~7 length
         if (strlen($customer) > 0) {
             $short_code = $customer;
+            $is_customer = 1;
         } else {
-            include_once './Bijective.php';
+            $is_customer = 0;
+            include_once __DIR__. DIRECTORY_SEPARATOR. 'Bijective.php';
             $obj = new Bijective();
 
             do {
@@ -66,11 +70,13 @@ class ShortUrl
 
         // create new record and get the new insert id number
         $sql = 'INSERT INTO ' . $this->table .
-            ' (long_url, create_time, short_code) ' . ' VALUES (:long_url, :timestamp, :short_code)';
+            ' (long_url, create_time, short_code, username, iscustomer) ' . ' VALUES (:long_url, :timestamp, :short_code, :username, :iscustomer)';
         $statement = $this->pdo->prepare($sql);
         $params = array(
             'short_code' => $short_code,
             'long_url'  => $url,
+            'username'  => $username,
+            'iscustomer'  => $is_customer,
             'timestamp' => $this->timestamp
         );
         $statement->execute($params);

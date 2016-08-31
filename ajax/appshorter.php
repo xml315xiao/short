@@ -1,9 +1,9 @@
 <?php
-include './ShortUrl.php';
+include __DIR__. DIRECTORY_SEPARATOR. 'ShortUrl.php';
 
 $base_url = 'http://mc.cc/';
-$url = $_GET['url'];
-$customer = $_GET['customer'];
+$url = isset($_GET['url']) ? $_GET['url'] : '';
+$token = isset($_GET['token']) ? $_GET['token'] : '';
 
 // check url format
 if ( strlen($url) === 0 ) {
@@ -17,10 +17,15 @@ if ( FALSE !== strpos($url, rtrim($base_url, '/')) ) {
     exit ( urldecode(json_encode(array('success'=>TRUE, 'short_url'=>$url, 'long_url'=>$url))) );
 }
 
-$short = new ShortUrl();
-
-if (strlen($customer) > 0 && $short->checkEnable($customer) === FALSE) {
-    exit ( urldecode(json_encode(array('success'=>FALSE, 'error'=>urlencode('自定义短链接已被使用'), 'long_url'=>$url))) );
+// verify
+if ( strlen($token) === 0) {
+    exit ( urldecode(json_encode(array('success'=>FALSE, 'error'=>urlencode('校验码不能为空'), 'long_url'=>$url))) );
 }
-$short_url = rtrim($base_url, '/'). '/'. $short->conventUrl($url, $customer);
+
+if (md5(md5($url. 'V0utjFzqmKmXAYGonmrM9')) != $token) {
+    exit ( urldecode(json_encode(array('success'=>FALSE, 'error'=>urlencode('校验码异常'), 'long_url'=>$url))) );
+}
+
+$short = new ShortUrl();
+$short_url = rtrim($base_url, '/'). '/'. $short->conventUrl($url, 'app');
 exit ( urldecode(json_encode(array('success'=>TRUE, 'short_url'=>urlencode($short_url), 'long_url'=>$url))) );

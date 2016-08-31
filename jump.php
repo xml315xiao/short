@@ -1,5 +1,5 @@
 <?php
-include './ShortUrl.php';
+include './ajax/ShortUrl.php';
 $short_url = $_SERVER['REQUEST_URI'];
 $base_url  = 'http://mc.cc/';
 $path = parse_url($short_url);

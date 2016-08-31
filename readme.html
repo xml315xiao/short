@@ -1,0 +1,46 @@
+<h1>短链接生成文档 （http://mc.cc )</h1>
+
+<p>Generates a shorter URI Documentation.</p>
+
+<h2>请求URL地址</h2>
+
+<p><a href="http://mc.cc/ajax/appshorter.php">http://mc.cc/ajax/appshorter.php</a></p>
+
+<h2>请求参数 （GET）</h2>
+
+<blockquote><h3>以下两参数是必须传递， 类型为字符串</h3>
+  <ul>
+    <li>url 输入要转换的原始长链接</li>
+    <li>token 校验码 (校验规则： 长链接地址后面跟字符串 “ V0utjFzqmKmXAYGonmrM9 ” 两次MD5后的值）</li>
+  </ul>
+  <p>示例：</p>
+  <p>url 为 &quot;http://www.google.com&quot;  </p>
+  <p>那token为 md5(md5(&quot;http://www.google.com&quot; + &quot;V0utjFzqmKmXAYGonmrM9&quot;)) 生成的值
+    “62dfee8d1a7dd5b9cf28656a73345978”</p></blockquote>
+
+<h2>返回结果 （JSON ）</h2>
+
+<ul>
+  <li><strong>成功示例</strong>
+    &gt; http://mc.cc/ajax/shorter/ajax/appshorter.php?url=http://www.google.com&amp;token=62dfee8d1a7dd5b9cf28656a73345978
+  </li>
+</ul>
+
+<blockquote>
+  <p>{&quot;success&quot;:true,&quot;short<em>url&quot;:&quot;http://mc.cc/bktC9B&quot;,&quot;long</em>url&quot;:&quot;http://www.google.com&quot;}
+</p>
+  <p>success: true </p>
+  <p>short_url : 返回生成后的短链接</p>
+  <p>long_url：返回原始长链接</p></blockquote>
+
+<ul>
+  <li><strong>失败示例</strong>
+    &gt; http://mc.cc/ajax/shorter/ajax/appshorter.php?url=http://www.google.com&amp;token=62dfee8d1a7dd5b9cf28656
+  </li>
+</ul>
+
+<blockquote><p>{&quot;success&quot;:false,&quot;error&quot;:&quot;校验码异常&quot;,&quot;long_url&quot;:&quot;http://www.google.com&quot;}</p>
+  <p>success: 　false</p>
+  <p>error : 返回错误异常信息</p>
+  <p>long_url：返回原始长链接</p>
+</blockquote>
